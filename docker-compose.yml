@@ -1,0 +1,31 @@
+# Local / reference deployment of ybrain. In production this stack is promoted
+# into ydocker and joined to the shared proxy network.
+services:
+  ybrain:
+    build: .
+    image: ybrain:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      YBRAIN_PORT: 8080
+      YBRAIN_DATA_REPO_URL: ${YBRAIN_DATA_REPO_URL:-}
+      YBRAIN_DATA_BRANCH: ${YBRAIN_DATA_BRANCH:-main}
+      YBRAIN_GIT_TOKEN: ${YBRAIN_GIT_TOKEN:-}
+      YBRAIN_DATA_DIR: /data/repo
+      YBRAIN_GIT_AUTHOR_EMAIL: ${YBRAIN_GIT_AUTHOR_EMAIL:-ybrain@example.com}
+      YBRAIN_PULL_INTERVAL: ${YBRAIN_PULL_INTERVAL:-180}
+      YBRAIN_SUPERVISOR_TOKENS: ${YBRAIN_SUPERVISOR_TOKENS:-}
+      YBRAIN_MAX_BODY_BYTES: ${YBRAIN_MAX_BODY_BYTES:-1000000}
+      YBRAIN_RATE_LIMIT_PER_MIN: ${YBRAIN_RATE_LIMIT_PER_MIN:-120}
+      YBRAIN_WEBHOOK_SECRET: ${YBRAIN_WEBHOOK_SECRET:-}
+    volumes:
+      - ybrain-data:/data
+    healthcheck:
+      test: ["CMD", "bun", "-e", "await fetch('http://localhost:8080/healthz')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  ybrain-data:
