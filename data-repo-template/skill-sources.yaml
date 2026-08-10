@@ -1,0 +1,24 @@
+# Skill sources ybrain indexes. ybrain reads each repo's SKILL.md frontmatter
+# (name + description) for unified search — it does NOT copy the skills. For
+# each source, `get_skill` returns the correct client-side install command.
+#
+# kind:
+#   internal    — this data repo's own skills/ dir (implicit; listed for clarity)
+#   skills-cli  — installed via `npx skills@latest add <repo>` (e.g. mattpocock)
+#   marketplace — a Claude Code plugin marketplace (`/plugin marketplace add`)
+#   folder      — plain repo of skill folders (git clone + copy into .claude/skills)
+sources:
+  - id: internal
+    kind: internal
+
+  - id: mattpocock
+    repo: mattpocock/skills
+    kind: skills-cli
+    branch: main
+    path: skills
+
+  # Example marketplace source (uncomment / adjust to a real one):
+  # - id: anthropic
+  #   repo: anthropics/skills
+  #   kind: marketplace
+  #   branch: main

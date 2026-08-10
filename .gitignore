@@ -1,0 +1,6 @@
+node_modules/
+.env
+.env.local
+# runtime clone of the data repo (never commit it into the code repo)
+/data/
+*.log
